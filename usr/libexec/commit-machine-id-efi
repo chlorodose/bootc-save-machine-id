@@ -1,0 +1,11 @@
+#!/bin/sh
+EFI_VENDOR_GUID=7729481f-0fde-42a9-8d25-e7f062b0cc0e
+set -e
+[ ! -z "$EFI_VENDOR_GUID" ] && [ -e "/sys/firmware/efi/efivars" ]
+EFI_VAR="/sys/firmware/efi/efivars/SystemdMachineId-$EFI_VENDOR_GUID"
+
+MACHINE_ID="$(systemd-machine-id-setup --print)"
+if [ ! -e "$EFI_VAR" ]; then
+    printf "\x07\x00\x00\x00$MACHINE_ID" >"$EFI_VAR"
+    echo "Machine id commited to efivars" >&2
+fi

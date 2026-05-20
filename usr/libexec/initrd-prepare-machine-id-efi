@@ -1,0 +1,9 @@
+#!/bin/sh
+set -e
+[ ! -z "$EFI_VENDOR_GUID" ] && [ -e "/sys/firmware/efi/efivars" ]
+EFI_VAR="/sys/firmware/efi/efivars/SystemdMachineId-$EFI_VENDOR_GUID"
+
+if [ -e "$EFI_VAR" ]; then
+    echo "$(tail -c +5 "$EFI_VAR")" >/run/machine-id
+    mount -o bind /run/machine-id /sysroot/etc/machine-id
+fi

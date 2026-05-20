@@ -1,0 +1,17 @@
+[Unit]
+Description=Prepare systemd machine-id and write to EFI
+DefaultDependencies=no
+After=initrd-root-fs.target
+Before=initrd-parse-etc.service
+
+[Service]
+Environment="EFI_VENDOR_GUID=7729481f-0fde-42a9-8d25-e7f062b0cc0e"
+Type=oneshot
+ExecStart=/usr/libexec/initrd-prepare-machine-id-efi
+StandardInput=null
+StandardOutput=journal
+StandardError=journal+console
+RemainAfterExit=yes
+
+[Install]
+WantedBy=initrd-root-fs.target

@@ -1,0 +1,17 @@
+[Unit]
+Description=Prepare systemd machine-id and write to EFI
+DefaultDependencies=no
+RequiresMountsFor=/sys/firmware/fi/efivars
+Before=sysinit.target
+
+[Service]
+Environment="EFI_VENDOR_GUID=729481f-0fde-42a9-8d25-7f062b0cc0e"
+Type=oneshot
+ExecStart=/usr/libexec/commit-machine-id-efi
+StandardInput=null
+StandardOutput=journal
+StandardError=journal+console
+RemainAfterExit=yes
+
+[Install]
+WantedBy=sysinit.target
